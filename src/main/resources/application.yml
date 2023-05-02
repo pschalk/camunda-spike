@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: CamundaSpike
+
+camunda:
+  bpm:
+    login:
+      enabled: true
+      user-id: admin
+    admin-user:
+      email: admin@local
+      id: admin
+      first-name: Bud
+      last-name: Spencer
+      password: admin

@@ -12,16 +12,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <kotlin.version>1.4.0</kotlin.version>
+        <kotlin.version>1.8.21</kotlin.version>
         <kotlin.code.style>official</kotlin.code.style>
 
-        <camunda.spring-boot.version>7.13.0</camunda.spring-boot.version>
-        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
+        <camunda.version>7.18.0-ee</camunda.version>
+        <spring-boot.version>2.7.3</spring-boot.version>
 
         <junit.version>4.12</junit.version>
-        <camunda-bpm-assert.version>2.0</camunda-bpm-assert.version>
-        <camunda-bpm-mockito.version>4.13.0</camunda-bpm-mockito.version>
-        <assertj-core.version>3.17.0</assertj-core.version>
+        <camunda-bpm-assert.version>2.1</camunda-bpm-assert.version>
+        <assertj-core.version>3.24.2</assertj-core.version>
+        <camunda-platform-7-mockito.version>6.18.0</camunda-platform-7-mockito.version>
+        <camunda-bpm-junit5.version>1.0.0</camunda-bpm-junit5.version>
     </properties>
 
     <dependencyManagement>
@@ -32,6 +33,14 @@
                 <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.camunda.bpm</groupId>
+                <artifactId>camunda-bom</artifactId>
+                <version>${camunda.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -45,41 +54,47 @@
 
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
-            <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
-            <version>${camunda.spring-boot.version}</version>
+            <artifactId>camunda-bpm-spring-boot-starter-webapp-ee</artifactId>
+            <version>${camunda.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.holunda</groupId>
+            <artifactId>camunda-platform-7-autologin</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.github.oshai</groupId>
+            <artifactId>kotlin-logging-jvm</artifactId>
+            <version>4.0.0-beta-22</version>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-test</artifactId>
-            <version>${camunda.spring-boot.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.2.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.microutils</groupId>
-            <artifactId>kotlin-logging</artifactId>
-            <version>1.7.6</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- Testing -->
+        <dependency>
+            <groupId>org.camunda.bpm.extension</groupId>
+            <artifactId>camunda-bpm-junit5</artifactId>
+            <version>${camunda-bpm-junit5.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit</artifactId>
@@ -88,10 +103,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.camunda.bpm.extension.mockito</groupId>
-            <artifactId>camunda-bpm-mockito</artifactId>
+            <groupId>org.camunda.community.mockito</groupId>
+            <artifactId>camunda-platform-7-mockito</artifactId>
+            <version>${camunda-platform-7-mockito.version}</version>
             <scope>test</scope>
-            <version>${camunda-bpm-mockito.version}</version>
         </dependency>
 
         <dependency>
@@ -112,14 +127,21 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>3.4.4</version>
+            <version>5.3.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.3</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -150,7 +172,21 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
         </plugins>
     </build>
+
+    <repositories>
+        <repository>
+            <id>camunda-bpm-ee</id>
+            <name>camunda-bpm-ee</name>
+            <url>https://artifacts.camunda.com/artifactory/private/</url>
+        </repository>
+    </repositories>
 
 </project>

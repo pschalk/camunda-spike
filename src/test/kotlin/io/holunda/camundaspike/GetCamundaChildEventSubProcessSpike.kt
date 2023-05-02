@@ -1,19 +1,21 @@
 package io.holunda.camundaspike
 
+import io.github.oshai.KotlinLogging
 import io.holunda.camundaspike.GetCamundaChildEventSubProcessSpike.Companion.BPM
-import mu.KotlinLogging
 import org.assertj.core.api.Assertions.assertThat
 import org.camunda.bpm.engine.runtime.ActivityInstance
 import org.camunda.bpm.engine.runtime.ProcessInstance
 import org.camunda.bpm.engine.test.Deployment
 import org.camunda.bpm.engine.test.assertions.bpmn.BpmnAwareTests.runtimeService
+import org.camunda.bpm.extension.junit5.test.ProcessEngineExtension
 import org.camunda.bpm.spring.boot.starter.test.helper.AbstractProcessEngineRuleTest
-import org.junit.Rule
-import org.junit.Test
-import org.mockito.junit.MockitoJUnit
-import org.mockito.junit.MockitoRule
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.junit.jupiter.MockitoExtension
 
 private val logger = KotlinLogging.logger {}
+
+@ExtendWith(ProcessEngineExtension::class, MockitoExtension::class)
 @Deployment(resources = [BPM])
 class GetCamundaChildEventSubProcessSpike: AbstractProcessEngineRuleTest() {
 
@@ -21,9 +23,6 @@ class GetCamundaChildEventSubProcessSpike: AbstractProcessEngineRuleTest() {
         const val PROCESS_KEY = "processWithEventSubProcess"
         const val BPM = "bpmn/process_with_event_sub_process.bpmn"
     }
-
-    @get: Rule
-    var mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @Test
     internal fun name() {
@@ -35,7 +34,7 @@ class GetCamundaChildEventSubProcessSpike: AbstractProcessEngineRuleTest() {
         assertThat(eventSubProcess?.activityId).isEqualTo("myEventSubProcess")
     }
 
-    fun getEventSubProcessAcitvity(processInstance: ProcessInstance): ActivityInstance? {
+    private fun getEventSubProcessAcitvity(processInstance: ProcessInstance): ActivityInstance? {
         return runtimeService()
                 .getActivityInstance(processInstance.id)
                 .childActivityInstances.find { it.activityType == "subProcess" }
