@@ -4,11 +4,16 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1bmmlxx</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1bmmlxx" sourceRef="StartEvent_1" targetRef="Event_1xtav8w" />
+    <bpmn:sequenceFlow id="Flow_1bmmlxx" sourceRef="StartEvent_1" targetRef="Activity_0yb1hfc" />
     <bpmn:endEvent id="Event_1xtav8w" camunda:asyncBefore="true">
-      <bpmn:incoming>Flow_1bmmlxx</bpmn:incoming>
+      <bpmn:incoming>Flow_064caym</bpmn:incoming>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1iwrix6" errorRef="Error_1713xqk" />
     </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_064caym" sourceRef="Activity_0yb1hfc" targetRef="Event_1xtav8w" />
+    <bpmn:serviceTask id="Activity_0yb1hfc" name="Dummy" camunda:delegateExpression="${dummyDelegate}">
+      <bpmn:incoming>Flow_1bmmlxx</bpmn:incoming>
+      <bpmn:outgoing>Flow_064caym</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmn:error id="Error_1713xqk" name="TestError" errorCode="TestError" camunda:errorMessage="TestError Message" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
@@ -19,8 +24,16 @@
       <bpmndi:BPMNShape id="Event_0rcg63e_di" bpmnElement="Event_1xtav8w">
         <dc:Bounds x="502" y="79" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_114uc5c_di" bpmnElement="Activity_0yb1hfc">
+        <dc:Bounds x="300" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1bmmlxx_di" bpmnElement="Flow_1bmmlxx">
         <di:waypoint x="215" y="97" />
+        <di:waypoint x="300" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_064caym_di" bpmnElement="Flow_064caym">
+        <di:waypoint x="400" y="97" />
         <di:waypoint x="502" y="97" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
